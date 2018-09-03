@@ -17,8 +17,7 @@ bkg_cen_fd = 'bkg/CEN'
 bkg_bm_fd = 'bkg/BM'
 
 bkg_sal = 'listdata/circleSAL'
-#cencsvname = 'csv/cenvx'+str(u)+'vy'+str(v)+'.csv'
-#bmcsvname = 'csv/bmvx'+str(u)+'vy'+str(v)+'.csv'
+
 
 bmcsvname = 'bm.csv'
 cencsvname = 'cen.csv'

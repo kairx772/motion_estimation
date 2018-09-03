@@ -99,21 +99,14 @@ def WriteListToAviwithSalFixP(filmlistfilename, vxyname, exporfoldername, sallis
         btrgb.append(brgb)
     n = 0
     for backtorgb, sal in zip(btrgb, saldata):
-        
         for i in range(8):
             for j in range(8):
                 parax = int(BMAdata[n][j,i,1])
                 paray = int(BMAdata[n][j,i,0])
                 DrawVxyArrow(backtorgb, i*8+4, j*8+4, parax, paray, 255, 0, 0)
-                #cv2.line(backtorgb,(i*8*12+48,j*8*12+48),(i*8*12+48+parax,j*8*12+48+paray),(255,0,0),5)
-                #cv2.circle(backtorgb,(i*8*12+48+parax,j*8*12+48+paray), 7, (255,0,0), -1)
         for dri in xrange(8):
             backtorgb[dri*8*12, :] = [255, 255, 255]
             backtorgb[:, dri*8*12] = [255, 255, 255]
         backtorgb = DrawBox(backtorgb, sal[0]*8, sal[1]*8, 255, 0, 0)
-        
         cv2.imwrite(exporfoldername+'/gray%d.jpg' % n, backtorgb)
         n+=1
-
-
-

@@ -11,7 +11,6 @@ winsize = 8
 
 def Compute_Centroid(im1, im2):
     uv = np.zeros((8,8,2))
-    # within window window_size * window_size
     for i in range(0, 8):
         for j in range(0, 8):
             ced1 = ndimage.measurements.center_of_mass(im1[i*8:i*8+8, j*8:j*8+8])
@@ -28,14 +27,6 @@ def Compute_Centroid(im1, im2):
 def BMAvelocity(x, y, prevfm, nextfm):
     bestVxy = [0, 0]
     bestcost = 99999
-    if x ==56:
-        xwinmax = 0
-    if y ==56:
-        ywinmax = 0
-    if x ==0:
-        xwinmin = 0
-    if y ==0:
-        ywinmin = 0
     for Wx in [4, -4, 3, -3, 2, -2, 1, -1, 0]:
         for Wy in [4, -4, 3, -3, 2, -2, 1, -1, 0]:
             srchx, srchy = x+Wx, y+Wy
@@ -63,8 +54,6 @@ def FindMatchBlock(x, y, prevfm, nextfm, winmin, winmax):
     for Wx in [4, -4, 3, -3, 2, -2, 1, -1, 0]: #xrange(xwinmin, xwinmax)
         for Wy in [4, -4, 3, -3, 2, -2, 1, -1, 0]: #xrange(ywinmin, ywinmax)
             srchx, srchy = x+Wx, y+Wy
-            #srchx = clamp(srchx, 0, 64 - winsize -1)
-            #srchy = clamp(srchy, 0, 64 - winsize -1)
             #calculate SAD
             cost = np.sum(np.absolute(np.subtract(prevfm[x:x+winsize,y:y+winsize].astype(int),nextfm[srchx:srchx+winsize,srchy:srchy+winsize].astype(int))))
             #compare and find smallest SAD
