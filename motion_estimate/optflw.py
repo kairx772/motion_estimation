@@ -24,6 +24,36 @@ def Compute_Centroid(im1, im2):
                 uv[i,j,1]=nu[1]
     return uv
 
+def Lucas_Kanade(im1, im2):
+    fx = np.zeros(im1.shape)
+    fy = np.zeros(im1.shape)
+    ft = np.zeros(im1.shape)
+
+    fx[1:-1, 1:-1] = (im1[1:-1, 2:] - im1[1:-1, :-2])
+    fy[1:-1, 1:-1] = (im1[2:, 1:-1] - im1[:-2, 1:-1])
+    ft[1:-1, 1:-1] = (im1[1:-1, 1:-1] - im2[1:-1, 1:-1])
+
+    uv = np.zeros([8,8,2])
+    lamda = 0.0001
+    # within window window_size * window_size
+    for i in range(0, 8):
+        for j in range(0, 8):
+            Ix = fx[i*8:i*8+8, j*8:j*8+8].flatten()
+            Iy = fy[i*8:i*8+8, j*8:j*8+8].flatten()
+            It = ft[i*8:i*8+8, j*8:j*8+8].flatten()
+            b = np.array([[-Ix.dot(It)],[-Iy.dot(It)]])
+            A = np.array([[Ix.dot(Ix)+lamda,Ix.dot(Iy)],[Iy.dot(Ix),Iy.dot(Iy)+lamda]])
+            if np.linalg.det(A) == 0:
+                uv[i,j,0]=0
+                uv[i,j,1]=0
+            else:
+                A = np.linalg.inv(A)
+                nu = np.dot(A, b)
+                uv[i,j,0]=-nu[1]
+                uv[i,j,1]=-nu[0]
+    return uv
+
+
 def BMAvelocity(x, y, prevfm, nextfm):
     bestVxy = [0, 0]
     bestcost = 99999
