@@ -70,8 +70,6 @@ def GenCircle(y,x):
 def GenCirList(exportfilename, x, y, Vx, Vy, fnum):
     circlelist = []
     for i in range(fnum):
-        circlelist.append(GenCircle(x+Vx*i,y+Vy*i))
-        print i
-	
+        circlelist.append(GenCircle(x+Vx*i,y+Vy*i))	
     with open(exportfilename, 'wb') as fp:
         pickle.dump(circlelist, fp)

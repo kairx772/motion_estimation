@@ -8,58 +8,7 @@ import csv
 winsize = 8
 
 def DrawBox(frame, x, y, r, g, b):
-    p = 0
-    q = 0
-    if x == 56:
-        p = 1
-    if y == 56:
-        q = 1
-
-    frame[x*12,y*12:(y+winsize)*12-q] = [r, g, b]
-    frame[x*12+1,y*12:(y+winsize)*12-q] = [r, g, b]
-    frame[x*12+2,y*12:(y+winsize)*12-q] = [r, g, b]
-    frame[(x+winsize)*12-p,y*12:(y+winsize)*12-q] = [r, g, b]
-    frame[(x+winsize)*12-p-1,y*12:(y+winsize)*12-q] = [r, g, b]
-    frame[(x+winsize)*12-p-2,y*12:(y+winsize)*12-q] = [r, g, b]
-    frame[x*12:(x+winsize)*12-p,y*12] = [r, g, b]
-    frame[x*12:(x+winsize)*12-p,y*12+1] = [r, g, b]
-    frame[x*12:(x+winsize)*12-p,y*12+2] = [r, g, b]
-    frame[x*12:(x+winsize)*12-p,(y+winsize)*12-q] = [r, g, b]
-    frame[x*12:(x+winsize)*12-p,(y+winsize)*12-q-1] = [r, g, b]
-    frame[x*12:(x+winsize)*12-p,(y+winsize)*12-q-2] = [r, g, b]
-    return frame
-
-def DrawboxBig(frame, x, y):
-    p = 1
-    q = 1
-
-    frame[x*12,y*12:(y+winsize)*12-q] = [0, 0, 255]
-    frame[x*12+1,y*12:(y+winsize)*12-q] = [0, 0, 255]
-    frame[x*12+2,y*12:(y+winsize)*12-q] = [0, 0, 255]
-    frame[(x+winsize)*12-p,y*12:(y+winsize)*12-q] = [0, 0, 255]
-    frame[(x+winsize)*12-p-1,y*12:(y+winsize)*12-q] = [0, 0, 255]
-    frame[(x+winsize)*12-p-2,y*12:(y+winsize)*12-q] = [0, 0, 255]
-    frame[x*12:(x+winsize)*12-p,y*12] = [0, 0, 255]
-    frame[x*12:(x+winsize)*12-p,y*12+1] = [0, 0, 255]
-    frame[x*12:(x+winsize)*12-p,y*12+2] = [0, 0, 255]
-    frame[x*12:(x+winsize)*12-p,(y+winsize)*12-q] = [0, 0, 255]
-    frame[x*12:(x+winsize)*12-p,(y+winsize)*12-q-1] = [0, 0, 255]
-    frame[x*12:(x+winsize)*12-p,(y+winsize)*12-q-2] = [0, 0, 255]
-    return frame
-
-
-def DrawBoxline(frame, x, y):
-    cv2.line(frame,(i*8*12+48,j*8*12+48),(i*8*12+48+parax,j*8*12+48+paray),(255,0,0),5)
-    p = 0
-    q = 0
-    if x == 56:
-        p = 1
-    if y == 56:
-        q = 1
-    frame[x*12,y*12:(y+winsize)*12-q] = [0, 0, 255]
-    frame[(x+winsize)*12-p,y*12:(y+winsize)*12-q] = [0, 0, 255]
-    frame[x*12:(x+winsize)*12-p,y*12] = [0, 0, 255]
-    frame[x*12:(x+winsize)*12-p,(y+winsize)*12-q] = [0, 0, 255]
+    cv2.rectangle(frame,(y*12,x*12),((y+8)*12,(x+8)*12),(r,g,b),3)
     return frame
 
 def DrawLine(frame):
@@ -68,11 +17,11 @@ def DrawLine(frame):
         frame[:, dri*8*12] = [255, 255, 255]
     return frame
 
-def DrawVxyArrow(frame, x, y, Vx, Vy):
+def DrawVxyArrow(frame, x, y, Vx, Vy, r, g, b):
     parax = int(Vx*10)
     paray = int(Vy*10)
-    cv2.line(frame,(x*12,y*12),(x*12+parax,y*12+paray),(0,255,0),5)
-    cv2.circle(frame,(x*12+parax,y*12+paray), 7, (0,255,0), -1)
+    cv2.line(frame,(x*12,y*12),(x*12+parax,y*12+paray),(r, g, b),5)
+    cv2.circle(frame,(x*12+parax,y*12+paray), 7, (r, g, b), -1)
     return frame
 
 
@@ -128,7 +77,7 @@ def WriteListToAviwithSal(filmlistfilename, vxyname, sallist, loclist, exporfold
         print vxy, sal, loc
         bigimg = np.kron(frame, np.ones((12,12))).astype(np.uint8)
         colorframe = cv2.cvtColor(bigimg, cv2.COLOR_GRAY2RGB)
-        colorframe = DrawVxyArrow(colorframe, loc[0]+4, loc[1]+4, vxy[0], vxy[1])
+        colorframe = DrawVxyArrow(colorframe, loc[0]+4, loc[1]+4, vxy[0], vxy[1], 0, 255, 0)
         colorframe = DrawLine(colorframe)
         #colorframe = DrawBox(colorframe, loc[0], loc[1], 0, 255, 0)
         cv2.rectangle(colorframe,(loc[0]*12,loc[1]*12),((loc[0]+8)*12,(loc[1]+8)*12),(0,255,0),5)
@@ -153,10 +102,11 @@ def WriteListToAviwithSalFixP(filmlistfilename, vxyname, exporfoldername, sallis
         
         for i in range(8):
             for j in range(8):
-                parax = int(BMAdata[n][j,i,1]*10)
-                paray = int(BMAdata[n][j,i,0]*10)
-                cv2.line(backtorgb,(i*8*12+48,j*8*12+48),(i*8*12+48+parax,j*8*12+48+paray),(255,0,0),5)
-                cv2.circle(backtorgb,(i*8*12+48+parax,j*8*12+48+paray), 7, (255,0,0), -1)
+                parax = int(BMAdata[n][j,i,1])
+                paray = int(BMAdata[n][j,i,0])
+                DrawVxyArrow(backtorgb, i*8+4, j*8+4, parax, paray, 255, 0, 0)
+                #cv2.line(backtorgb,(i*8*12+48,j*8*12+48),(i*8*12+48+parax,j*8*12+48+paray),(255,0,0),5)
+                #cv2.circle(backtorgb,(i*8*12+48+parax,j*8*12+48+paray), 7, (255,0,0), -1)
         for dri in xrange(8):
             backtorgb[dri*8*12, :] = [255, 255, 255]
             backtorgb[:, dri*8*12] = [255, 255, 255]
