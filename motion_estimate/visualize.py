@@ -85,7 +85,33 @@ def WriteListToAviwithSal(filmlistfilename, vxyname, sallist, loclist, exporfold
         cv2.imwrite(exporfoldername+'/gray%d.jpg' % n, colorframe)
         n += 1
 
-def WriteListToAviwithSalFixP(filmlistfilename, vxyname, exporfoldername, sallist):
+def WriteListToAviwithSalFixP(filmlistfilename, exporfoldername, vxyname, sallist):
+    with open (filmlistfilename, 'rb') as fp:
+        listdata = pickle.load(fp)
+    with open (vxyname, 'rb') as fp:
+        BMAdata = pickle.load(fp)
+    with open (sallist, 'rb') as fp:
+        saldata = pickle.load(fp)
+    btrgb=[]
+    for clr in listdata:
+        bigimg = np.kron(clr, np.ones((12,12))).astype(np.uint8)
+        brgb = cv2.cvtColor(bigimg, cv2.COLOR_GRAY2RGB)
+        btrgb.append(brgb)
+    n = 0
+    for backtorgb, sal in zip(btrgb, saldata):
+        for i in range(8):
+            for j in range(8):
+                parax = int(BMAdata[n][j,i,1])
+                paray = int(BMAdata[n][j,i,0])
+                DrawVxyArrow(backtorgb, i*8+4, j*8+4, parax, paray, 255, 0, 0)
+        for dri in xrange(8):
+            backtorgb[dri*8*12, :] = [255, 255, 255]
+            backtorgb[:, dri*8*12] = [255, 255, 255]
+        backtorgb = DrawBox(backtorgb, sal[0]*8, sal[1]*8, 255, 0, 0)
+        cv2.imwrite(exporfoldername+'/gray%d.jpg' % n, backtorgb)
+        n+=1
+
+def WriteListToAviwithSalFixpNetbump(filmlistfilename, exporfoldername, vxyname, sallist, neuronnumber):
     with open (filmlistfilename, 'rb') as fp:
         listdata = pickle.load(fp)
     with open (vxyname, 'rb') as fp:

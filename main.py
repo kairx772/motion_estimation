@@ -17,7 +17,8 @@ bkg_cen_fd = 'bkg/CEN'
 bkg_bm_fd = 'bkg/BM'
 
 bkg_sal = 'listdata/circleSAL'
-
+#cencsvname = 'csv/cenvx'+str(u)+'vy'+str(v)+'.csv'
+#bmcsvname = 'csv/bmvx'+str(u)+'vy'+str(v)+'.csv'
 
 bmcsvname = 'bm.csv'
 cencsvname = 'cen.csv'
@@ -29,7 +30,7 @@ vlz.GenCSV(bkg_bm, bkg_sal, bmcsvname)
 vlz.GenCSV(bkg_cen, bkg_sal, cencsvname)
 
 
-vlz.WriteListToAviwithSalFixP(videoname, bkg_cen, bkg_cen_fd, bkg_sal)
-vlz.WriteListToAviwithSalFixP(videoname, bkg_bm, bkg_bm_fd, bkg_sal)
+vlz.WriteListToAviwithSalFixP(videoname, bkg_cen_fd, bkg_cen, bkg_sal)
+vlz.WriteListToAviwithSalFixP(videoname, bkg_bm_fd, bkg_bm, bkg_sal)
 
 
