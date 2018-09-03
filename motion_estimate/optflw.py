@@ -157,7 +157,6 @@ def GenCENdatalist(listfilename, exportfilename):
         nextfm = k
         Loc_s = Diff_frame(nextfm, prevfm)
         binary_mass = np.where(Loc_s > 128 + 20, 1, 0)
-
         LKdata = Compute_Centroid(binary_mass_prev, binary_mass)
         LKdatalist.append(LKdata)
         binary_mass_prev = binary_mass
@@ -183,42 +182,11 @@ def GenBMAdatalistTracing(listfilename, exportVxy, exportMathcxy, exportsal, ini
         bestxy[0] = bestxy[0] + bestVxy[0]
         bestxy[1] = bestxy[1] + bestVxy[1]
         loclist.append([bestxy[0] - bestVxy[0], bestxy[1] - bestVxy[1]])
-        
         Vxylist.append(bestVxy)
-        sal_indexlist.append([(bestxy[0]+4)//8, (bestxy[1]+4)//8])
+        sal_indexlist.append([(bestxy[0]- bestVxy[0]+4)//8, (bestxy[1]- bestVxy[1]+4)//8])
         prevfm = k
         bestVxy = [] 
         n += 1
-    print Vxylist
-    with open(exportVxy, 'wb') as fp:
-        pickle.dump(Vxylist, fp)
-    with open(exportMathcxy, 'wb') as fp:
-        pickle.dump(loclist, fp)
-    with open(exportsal, 'wb') as fp:
-        pickle.dump(sal_indexlist, fp)
-
-def GenBMAdatalistTracingB(listfilename, exportVxy, exportMathcxy, exportsal, inix, iniy):
-    with open (listfilename, 'rb') as fp:
-        listdata = pickle.load(fp)
-    bestxy = [inix, iniy]
-    loclist = []
-    Vxylist = []
-    sal_indexlist = []
-    nextfm = listdata[0]
-    prevfm = listdata[0]
-    n = 0
-
-    for k in listdata:
-        nextfm = k
-        bestxy = FindMatchBlock(bestxy[0], bestxy[1], prevfm, nextfm)
-        loclist.append([bestxy[0] + bestVxy[0], bestxy[1] + bestVxy[1]])
-        
-        Vxylist.append(bestVxy)
-        sal_indexlist.append([(bestxy[0]+4)//8, (bestxy[1]+4)//8])
-        prevfm = k
-        bestVxy = [] 
-        n += 1
-    print Vxylist
     with open(exportVxy, 'wb') as fp:
         pickle.dump(Vxylist, fp)
     with open(exportMathcxy, 'wb') as fp:

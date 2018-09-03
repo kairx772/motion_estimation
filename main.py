@@ -7,7 +7,7 @@ y = 6
 Vx = 1
 Vy = 2
 n = 60
-
+'''
 videoname = 'listdata/circle'
 cpz.GenCirList(videoname, x, y, Vx, Vy, n)
 bkg_bm = 'listdata/circleBMA'
@@ -17,8 +17,6 @@ bkg_cen_fd = 'bkg/CEN'
 bkg_bm_fd = 'bkg/BM'
 
 bkg_sal = 'listdata/circleSAL'
-#cencsvname = 'csv/cenvx'+str(u)+'vy'+str(v)+'.csv'
-#bmcsvname = 'csv/bmvx'+str(u)+'vy'+str(v)+'.csv'
 
 bmcsvname = 'bm.csv'
 cencsvname = 'cen.csv'
@@ -34,3 +32,17 @@ vlz.WriteListToAviwithSalFixP(videoname, bkg_cen_fd, bkg_cen, bkg_sal)
 vlz.WriteListToAviwithSalFixP(videoname, bkg_bm_fd, bkg_bm, bkg_sal)
 
 
+exportVxy = 'listdata/circleVxy'
+exportsal = 'listdata/circlebmsal'
+BMloc = 'listdata/circlebmloc'
+mbtra_fd = 'bkg/BMtra'
+opw.GenBMAdatalistTracing(videoname, exportVxy, BMloc, exportsal, 2, 2)
+vlz.WriteListToAviwithSal(videoname, mbtra_fd, exportVxy, exportsal, BMloc)
+'''
+videoname = 'listdata/sliced_video/pillow_dark_sliced'
+exportVxy = 'listdata/circleVxy'
+exportsal = 'listdata/circlebmsal'
+BMloc = 'listdata/circlebmloc'
+mbtra_fd = 'bkg/BMtra'
+opw.GenBMAdatalistTracing(videoname, exportVxy, BMloc, exportsal, 48, 56)
+vlz.WriteListToAviwithSal(videoname, mbtra_fd, exportVxy, exportsal, BMloc)

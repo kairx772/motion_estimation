@@ -63,7 +63,7 @@ def GenCSVsalonly(vxysalname, sallist, exporfoldername):
                 Vyn = -j[1]
             writer.writerow([str(i[0]), str(i[1]), str(Vxp), str(Vxn), str(Vyp), str(Vyn)])
 
-def WriteListToAviwithSal(filmlistfilename, vxyname, sallist, loclist, exporfoldername):
+def WriteListToAviwithSal(filmlistfilename, exporfoldername, vxyname, sallist, loclist):
     with open (filmlistfilename, 'rb') as fp:
         listdata = pickle.load(fp)
     with open (vxyname, 'rb') as fp:
@@ -77,10 +77,12 @@ def WriteListToAviwithSal(filmlistfilename, vxyname, sallist, loclist, exporfold
         print vxy, sal, loc
         bigimg = np.kron(frame, np.ones((12,12))).astype(np.uint8)
         colorframe = cv2.cvtColor(bigimg, cv2.COLOR_GRAY2RGB)
-        colorframe = DrawVxyArrow(colorframe, loc[0]+4, loc[1]+4, vxy[0], vxy[1], 0, 255, 0)
+        colorframe = DrawVxyArrow(colorframe, loc[1]+4, loc[0]+4, vxy[1], vxy[0], 0, 255, 0)
+        #DrawVxyArrow(colorframe, loc[0]+4, loc[1]*8+4, int(vxy[0]), int(vxy[1]), 255, 0, 0)
         colorframe = DrawLine(colorframe)
         #colorframe = DrawBox(colorframe, loc[0], loc[1], 0, 255, 0)
-        cv2.rectangle(colorframe,(loc[0]*12,loc[1]*12),((loc[0]+8)*12,(loc[1]+8)*12),(0,255,0),5)
+        #cv2.rectangle(colorframe,(loc[0]*12,loc[1]*12),((loc[0]+8)*12,(loc[1]+8)*12),(0,255,0),5)
+        colorframe = DrawBox(colorframe, loc[0], loc[1], 0, 255, 0)
         colorframe = DrawBox(colorframe, sal[0]*8, sal[1]*8, 255, 0, 0)
         cv2.imwrite(exporfoldername+'/gray%d.jpg' % n, colorframe)
         n += 1
