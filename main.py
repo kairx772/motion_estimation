@@ -5,40 +5,42 @@ from motion_estimate import capresize as cpz
 x = 6
 y = 6
 Vx = 1
-Vy = 2
+Vy = 1
 n = 60
+
+bp0 = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+bp1 = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,5,5,5,5]
+bp2 = [1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,5,5,6,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,8]
+bp3 = [1,1,1,2,2,2,2,2,2,3,3,3,4,4,4,4,5,5,5,5,5,5,6,6,6,6,6,6,6,6,7,7,7,7,7,7,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8]
+bp4 = [1,1,2,2,2,2,2,2,3,3,3,3,4,4,4,5,5,5,5,6,6,6,7,7,7,7,7,7,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8]
+bp5 = [1,1,1,2,2,2,2,3,3,3,3,3,4,4,4,5,5,5,5,5,5,6,6,7,7,7,7,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8]
+bp6 = [1,1,1,2,2,2,2,2,3,3,3,4,4,4,5,5,5,5,5,5,5,6,6,7,7,7,7,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8]
+bp7 = [1,1,1,2,2,2,2,2,3,3,3,4,4,4,5,5,5,5,5,6,6,6,7,7,7,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8]
+
+bp55 = [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5]
+
+
+for Vy in [0,1,2]:
+	videoname = 'listdata/circle'
+	cpz.GenCirList(videoname, x, y, Vx, Vy, n)
+	bkg_bm = 'listdata/circleBMA'
+	bkg_bm_fd = 'bkg/BMallspeed/vx'+str(Vx)+'vy'+str(Vy)
+	bkg_sal = 'listdata/circleSAL'
+	bmcsvname = 'csv/bmvx'+str(Vx)+'vy'+str(Vy)+'.csv'
+
+	opw.GenSallist(videoname, bkg_sal)
+	opw.GenBMAdatalist(videoname, bkg_bm)
+	vlz.GenCSV(bkg_bm, bkg_sal, bmcsvname)
+	#vlz.WriteListToAviwithSalFixP(videoname, bkg_bm_fd, bkg_bm, bkg_sal)
+	vlz.WriteListToAviwithSalFixpNetbump(videoname, bkg_bm_fd, bkg_bm, bkg_sal, bp2, bp2)
 '''
-videoname = 'listdata/circle'
-cpz.GenCirList(videoname, x, y, Vx, Vy, n)
-bkg_bm = 'listdata/circleBMA'
-bkg_cen = 'listdata/circleCEN'
-bkg_loc = 'listdata/pikaLoc'
-bkg_cen_fd = 'bkg/CEN'
-bkg_bm_fd = 'bkg/BM'
-
-bkg_sal = 'listdata/circleSAL'
-
-bmcsvname = 'bm.csv'
-cencsvname = 'cen.csv'
-
-opw.GenSallist(videoname, bkg_sal)
-opw.GenBMAdatalist(videoname, bkg_bm)
-opw.GenCENdatalist(videoname, bkg_cen)
-vlz.GenCSV(bkg_bm, bkg_sal, bmcsvname)
-vlz.GenCSV(bkg_cen, bkg_sal, cencsvname)
-
-
-vlz.WriteListToAviwithSalFixP(videoname, bkg_cen_fd, bkg_cen, bkg_sal)
-vlz.WriteListToAviwithSalFixP(videoname, bkg_bm_fd, bkg_bm, bkg_sal)
-
-
 exportVxy = 'listdata/circleVxy'
 exportsal = 'listdata/circlebmsal'
 BMloc = 'listdata/circlebmloc'
 mbtra_fd = 'bkg/BMtra'
 opw.GenBMAdatalistTracing(videoname, exportVxy, BMloc, exportsal, 2, 2)
 vlz.WriteListToAviwithSal(videoname, mbtra_fd, exportVxy, exportsal, BMloc)
-'''
+
 videoname = 'listdata/sliced_video/pillow_dark_sliced'
 exportVxy = 'listdata/circleVxy'
 exportsal = 'listdata/circlebmsal'
@@ -46,3 +48,4 @@ BMloc = 'listdata/circlebmloc'
 mbtra_fd = 'bkg/BMtra'
 opw.GenBMAdatalistTracing(videoname, exportVxy, BMloc, exportsal, 48, 56)
 vlz.WriteListToAviwithSal(videoname, mbtra_fd, exportVxy, exportsal, BMloc)
+'''

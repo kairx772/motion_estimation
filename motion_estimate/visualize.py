@@ -7,8 +7,8 @@ import csv
 
 winsize = 8
 
-def DrawBox(frame, x, y, r, g, b):
-    cv2.rectangle(frame,(y*12,x*12),((y+8)*12,(x+8)*12),(r,g,b),3)
+def DrawBox(frame, x, y, r, g, b, w):
+    cv2.rectangle(frame,(y*12,x*12),((y+8)*12,(x+8)*12),(r,g,b),w)
     return frame
 
 def DrawLine(frame):
@@ -109,11 +109,16 @@ def WriteListToAviwithSalFixP(filmlistfilename, exporfoldername, vxyname, sallis
         for dri in xrange(8):
             backtorgb[dri*8*12, :] = [255, 255, 255]
             backtorgb[:, dri*8*12] = [255, 255, 255]
-        backtorgb = DrawBox(backtorgb, sal[0]*8, sal[1]*8, 255, 0, 0)
+        backtorgb = DrawBox(backtorgb, sal[0]*8, sal[1]*8, 255, 0, 0, 3)
         cv2.imwrite(exporfoldername+'/gray%d.jpg' % n, backtorgb)
         n+=1
 
-def WriteListToAviwithSalFixpNetbump(filmlistfilename, exporfoldername, vxyname, sallist, neuronnumber):
+def WriteListToAviwithSalFixpNetbump(filmlistfilename, 
+                                     exporfoldername, 
+                                     vxyname, 
+                                     sallist, 
+                                     neuronnumber0, 
+                                     neuronnumber1):
     with open (filmlistfilename, 'rb') as fp:
         listdata = pickle.load(fp)
     with open (vxyname, 'rb') as fp:
@@ -126,7 +131,7 @@ def WriteListToAviwithSalFixpNetbump(filmlistfilename, exporfoldername, vxyname,
         brgb = cv2.cvtColor(bigimg, cv2.COLOR_GRAY2RGB)
         btrgb.append(brgb)
     n = 0
-    for backtorgb, sal in zip(btrgb, saldata):
+    for backtorgb, sal, bpx, bpy in zip(btrgb, saldata, neuronnumber0, neuronnumber1):
         for i in range(8):
             for j in range(8):
                 parax = int(BMAdata[n][j,i,1])
@@ -135,6 +140,7 @@ def WriteListToAviwithSalFixpNetbump(filmlistfilename, exporfoldername, vxyname,
         for dri in xrange(8):
             backtorgb[dri*8*12, :] = [255, 255, 255]
             backtorgb[:, dri*8*12] = [255, 255, 255]
-        backtorgb = DrawBox(backtorgb, sal[0]*8, sal[1]*8, 255, 0, 0)
+        backtorgb = DrawBox(backtorgb, (bpx-1)*8, (bpy-1)*8, 0, 255, 0, 7)
+        backtorgb = DrawBox(backtorgb, sal[0]*8, sal[1]*8, 255, 0, 0, 2)
         cv2.imwrite(exporfoldername+'/gray%d.jpg' % n, backtorgb)
         n+=1
